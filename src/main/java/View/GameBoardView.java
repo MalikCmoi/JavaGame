@@ -22,16 +22,53 @@ public class GameBoardView {
         createBoard();  // Création initiale de la grille.
     }
 
-    // Méthode pour créer la grille
+    // Création de la grille interactive
     private void createBoard() {
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
+                // Crée une cellule
                 Rectangle cell = new Rectangle(cellSize, cellSize);
-                cell.setFill(Color.LIGHTGRAY); // Couleur de remplissage
-                cell.setStroke(Color.BLACK);  // Bordure
+                cell.setFill(Color.BEIGE);
+                cell.setStroke(Color.BROWN);
+
+                // Ajoute un événement de clic pour déplacer un joueur
+                final int finalRow = row;
+                final int finalCol = col;
+                cell.setOnMouseClicked(event -> {
+                    handleCellClick(finalRow, finalCol); // Gère le déplacement sur clic
+                });
+
+                // Ajoute la cellule à la grille
                 grid.add(cell, col, row);
             }
         }
+    }
+
+    private int currentPlayerId = 1; // ID du joueur actif (alterne entre 1 et 2, etc.)
+
+    // Gérer le déplacement d'un joueur au clic
+    private void handleCellClick(int row, int col) {
+        // Vérifie qui doit jouer (joueur actif)
+        Circle player = playerIcons.get(currentPlayerId);
+        if (player == null) {
+            System.out.println("Erreur : Joueur introuvable !");
+            return;
+        }
+
+        // Récupérer la position actuelle du joueur
+        Integer oldRow = GridPane.getRowIndex(player);
+        Integer oldCol = GridPane.getColumnIndex(player);
+
+        if (oldRow == null || oldCol == null) {
+            System.out.println("Erreur : Position actuelle du joueur inconnue !");
+            return;
+        }
+
+        // Déplacer visuellement le joueur
+        movePlayer(oldRow, oldCol, row, col, currentPlayerId);
+
+        // Alterner le joueur actif
+        currentPlayerId = (currentPlayerId == 1) ? 2 : 1;
     }
 
     // Ajout d'un joueur identifié à la grille
