@@ -1,34 +1,46 @@
+package com.example.javagame;// Player.java
+
+
 public class Player {
-    private String id;
+    private int id;
     private String name;
-    private int xp;
-    private int health;
+    private int hp;
+    private int[] position;
 
-    public Player() {
-    }
+    public Player() {}
 
-    public Player(String id, String name, int xp) {
+    public Player(int id, String name, int hp, int[] position) {
         this.id = id;
         this.name = name;
-        this.xp = xp;
+        this.hp = hp;
+        this.position = position;
     }
 
-    // Getters / Setters
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public int getXp() { return xp; }
-    public void setXp(int xp) { this.xp = xp; }
-    public void addXp(int xp) { this.xp += xp; }
-    public void removeXp(int xp) { this.xp -= xp; }
-    public void resetXp() { this.xp = 0; }
+    public int getHp() {
+        return hp;
+    }
+    public void setHp(int hp) {
+        this.hp = hp;
+    }
 
-    public void setHealth(int health) { this.health = health; }
-    public int getHealth() { return health; }
-    public void decreaseHealth(int damage) { this.health -= damage; }
-    public void increaseHealth(int heal) { this.health += heal; }
-    public boolean isDead() { return this.health <= 0; }
+    public int[] getPosition() {
+        return position;
+    }
+    public void setPosition(int[] position) {
+        this.position = position;
+    }
 }
