@@ -13,10 +13,12 @@ public class GameBoardApplication extends Application {
         // Crée une instance du Plateau (Vue)
         GameBoardView gameBoardView = new GameBoardView();
 
-        Player player = new Player(0, 0, 100, 0);
+        Player player1 = new Player(0, 0, 100, 0);
+        Player player2 = new Player(9, 9, 100, 0);
 
-        GameController controller = new GameController(gameBoardView, player);
-        controller.spawnPlayer();
+        GameController controller = new GameController(gameBoardView, player1);
+        controller.spawnPlayer(1);
+        controller.spawnPlayer(2);
 
         Scene scene = new Scene(gameBoardView.getGameBoard(), 800, 600);
         stage.setTitle("Battle Arena - Jeu Multijoueur");

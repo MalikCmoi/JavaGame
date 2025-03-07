@@ -14,7 +14,6 @@ public class Player {
         this.xp = xp;
     }
 
-    // Accesseurs et mutateurs (getters et setters)
     public int getRow() { return row; }
     public int getCol() { return col; }
     public void setPosition(int row, int col) {
