@@ -5,7 +5,7 @@ public class Player {
     private int col;    // Colonne actuelle
     private int hp;     // Points de vie
     private int xp;     // Points d'expérience
-
+    public int id;
     // Constructeur
     public Player(int row, int col, int hp, int xp) {
         this.row = row;

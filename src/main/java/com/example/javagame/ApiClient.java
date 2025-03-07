@@ -13,6 +13,9 @@ public class ApiClient {
         this.BASE_URL = baseUrl;
     }
 
+
+
+
     // Méthode utilitaire pour effectuer un POST JSON
     private String doPost(String endpoint, String jsonBody) throws IOException {
         URL url = new URL(BASE_URL + endpoint);

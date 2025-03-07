@@ -9,7 +9,7 @@ import java.util.Map;
 public class GameController {
     private GameBoardView gameBoardView;
     private int currentPlayerId = 1;
-    private Map<Integer, Player> players = new HashMap<>(); // Map des joueurs avec leurs playerId
+    public Map<Integer, Player> players = new HashMap<>(); // Map des joueurs avec leurs playerId
 
     public GameController(GameBoardView gameBoardView) {
         this.gameBoardView = gameBoardView;
@@ -42,7 +42,7 @@ public class GameController {
         }
 
         // Validation auprès du serveur
-        boolean isValidMove = validateMoveWithServer(playerId, newRow, newCol);
+        boolean isValidMove = true;
 
         if (isValidMove) {
             // Sauvegarder la position précédente
