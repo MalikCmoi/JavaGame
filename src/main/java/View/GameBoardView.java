@@ -1,28 +1,34 @@
 package View;
 
+import Controller.GameController;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-
 import java.util.HashMap;
 import java.util.Map;
 
 public class GameBoardView {
-    private final int rows = 10;              // Lignes du plateau
-    private final int cols = 10;              // Colonnes du plateau
-    private final int cellSize = 50;          // Taille des cellules
+    private final int rows = 10;             // Lignes du plateau
+    private final int cols = 10;             // Colonnes du plateau
+    private final int cellSize = 50;         // Taille des cellules
     private GridPane grid;
+    private GameController controller;       // Contrôleur relié à la vue
 
-    // Map pour suivre les joueurs actuellement sur la grille
+    // Map pour suivre les icônes des joueurs
     private Map<Integer, Circle> playerIcons = new HashMap<>();
 
     public GameBoardView() {
         grid = new GridPane();
-        createBoard();  // Création initiale de la grille.
+        createBoard();  // Initialise la grille
     }
 
-    // Création de la grille interactive
+    // Connecte la vue au contrôleur (via GameBoardApplication)
+    public void setController(GameController controller) {
+        this.controller = controller;
+    }
+
+    // Création de la grille
     private void createBoard() {
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
@@ -31,12 +37,10 @@ public class GameBoardView {
                 cell.setFill(Color.BEIGE);
                 cell.setStroke(Color.BROWN);
 
-                // Ajoute un événement de clic pour déplacer un joueur
+                // Ajoute un clic événementiel pour tenter un déplacement
                 final int finalRow = row;
                 final int finalCol = col;
-                cell.setOnMouseClicked(event -> {
-                    handleCellClick(finalRow, finalCol); // Gère le déplacement sur clic
-                });
+                cell.setOnMouseClicked(event -> handleCellClick(finalRow, finalCol));
 
                 // Ajoute la cellule à la grille
                 grid.add(cell, col, row);
@@ -44,78 +48,50 @@ public class GameBoardView {
         }
     }
 
-    private int currentPlayerId = 1; // ID du joueur actif (alterne entre 1 et 2, etc.)
-
-    // Gérer le déplacement d'un joueur au clic
+    // Gestion du clic pour déplacer un joueur
     private void handleCellClick(int row, int col) {
-        // Vérifie qui doit jouer (joueur actif)
-        Circle player = playerIcons.get(currentPlayerId);
-        if (player == null) {
-            System.out.println("Erreur : Joueur introuvable !");
+        if (controller == null) {
+            System.out.println("Erreur : Contrôleur non connecté !");
             return;
         }
 
-        // Récupérer la position actuelle du joueur
-        Integer oldRow = GridPane.getRowIndex(player);
-        Integer oldCol = GridPane.getColumnIndex(player);
-
-        if (oldRow == null || oldCol == null) {
-            System.out.println("Erreur : Position actuelle du joueur inconnue !");
-            return;
-        }
-
-        // Déplacer visuellement le joueur
-        movePlayer(oldRow, oldCol, row, col, currentPlayerId);
-
-        // Alterner le joueur actif
-        currentPlayerId = (currentPlayerId == 1) ? 2 : 1;
+        // Demander au contrôleur de gérer le déplacement du joueur actif
+        controller.movePlayer(controller.getCurrentPlayerId(), row, col);
     }
 
-    // Ajout d'un joueur identifié à la grille
+    // Ajout d'un joueur (visuellement)
     public void addPlayer(int row, int col, int playerId) {
         Circle player = new Circle(cellSize / 2.5); // Rayon ajusté
-        if (playerId == 1) {
-            player.setFill(Color.BLUE); // Joueur 1
-        } else if (playerId == 2) {
-            player.setFill(Color.RED); // Joueur 2
-        } else {
-            player.setFill(Color.GREEN); // Autres joueurs
-        }
 
-        playerIcons.put(playerId, player); // Associer l'identifiant à l'icône graphique du joueur
+        // Différencier les couleurs des joueurs
+        if (playerId == 1) player.setFill(Color.BLUE);
+        else if (playerId == 2) player.setFill(Color.RED);
+        else player.setFill(Color.GREEN);
+
+        // Ajouter l'icône du joueur
+        playerIcons.put(playerId, player);
         GridPane.setRowIndex(player, row);
         GridPane.setColumnIndex(player, col);
         grid.getChildren().add(player);
     }
 
-    // Déplacer un joueur existant
+    // Déplacer un joueur (visuellement)
     public void movePlayer(int oldRow, int oldCol, int newRow, int newCol, int playerId) {
-        // Récupérer l'icône du joueur via son ID
         Circle player = playerIcons.get(playerId);
 
         if (player == null) {
-            System.out.println("Erreur : Joueur avec l'ID " + playerId + " non trouvé !");
+            System.out.println("Erreur : Joueur " + playerId + " introuvable dans la vue !");
             return;
         }
 
-        // Vérifie si le joueur existe déjà dans la liste des enfants (au cas où il aurait été supprimé)
-        if (!grid.getChildren().contains(player)) {
-            System.out.println("Erreur : L'icône du joueur est manquante sur le plateau.");
-            return;
-        }
-
-        // Supprime l'ancienne position (elle sera automatiquement gérée dans JavaFX)
-        grid.getChildren().remove(player);
-
-        // Met à jour les positions dans le GridPane (nouvel emplacement)
+        // Mettre à jour les positions du joueur
         GridPane.setRowIndex(player, newRow);
         GridPane.setColumnIndex(player, newCol);
 
-        // Réajoute à la grille si nécessaire pour éviter tout manque
-        grid.getChildren().add(player);
+        System.out.println("Vue mise à jour : Joueur " + playerId + " déplacé vers (" + newRow + ", " + newCol + ")");
     }
 
-    // Getter pour accéder à la grille
+    // Obtenir la grille
     public GridPane getGameBoard() {
         return grid;
     }
