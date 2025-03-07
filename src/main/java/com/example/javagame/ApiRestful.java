@@ -11,20 +11,34 @@ import java.util.*;
 public class ApiRestful {
     private static final PlayerRepository repo = new PlayerRepository();
 
+//    @POST
+//    @Path("/connect")
+//    public Response connect(ConnectRequest req) {
+//        if (req.getPlayerName() == null || req.getPlayerName().isEmpty()) {
+//            return Response.status(400).entity("Invalid name").build();
+//        }
+//        Player p = repo.connectPlayer(req.getPlayerName());
+//        List<Player> players = repo.getAllPlayers();
+//        Map<String,Object> gameStateMap = new HashMap<>();
+//        gameStateMap.put("players", players);
+//        gameStateMap.put("turn", repo.getCurrentTurn());
+//        Map<String,Object> result = new HashMap<>();
+//        result.put("playerId", p.getId());
+//        result.put("gameState", gameStateMap);
+//        return Response.ok(result).build();
+//    }
+
     @POST
     @Path("/connect")
     public Response connect(ConnectRequest req) {
         if (req.getPlayerName() == null || req.getPlayerName().isEmpty()) {
-            return Response.status(400).entity("Invalid name").build();
+            return Response.status(400)
+                    .entity("Invalid name")
+                    .build();
         }
         Player p = repo.connectPlayer(req.getPlayerName());
-        List<Player> players = repo.getAllPlayers();
-        Map<String,Object> gameStateMap = new HashMap<>();
-        gameStateMap.put("players", players);
-        gameStateMap.put("turn", repo.getCurrentTurn());
         Map<String,Object> result = new HashMap<>();
         result.put("playerId", p.getId());
-        result.put("gameState", gameStateMap);
         return Response.ok(result).build();
     }
 
