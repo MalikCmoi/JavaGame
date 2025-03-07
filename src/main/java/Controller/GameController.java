@@ -14,7 +14,6 @@ public class GameController {
         this.gameBoardView = gameBoardView;
     }
 
-    // Ajouter un joueur au contrôleur
     public void addPlayer(int playerId, Player player) {
         players.put(playerId, player);
         gameBoardView.addPlayer(player.getRow(), player.getCol(), playerId);

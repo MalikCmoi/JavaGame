@@ -34,9 +34,9 @@ public class GameBoardApplication extends Application {
         new Thread(() -> {
             try {
                 Thread.sleep(2000); // Pause de 2 secondes
-                controller.movePlayer(1, 1, 1);  // Déplace le joueur 1 à (1, 1)
+                controller.movePlayer(1, 1, 1);
                 Thread.sleep(2000); // Pause encore
-                controller.movePlayer(2, 8, 8);  // Déplace le joueur 2 à (8, 8)
+                controller.movePlayer(2, 8, 8);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
